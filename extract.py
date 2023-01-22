@@ -37,7 +37,7 @@ class MPObject():
     def read_video(self, video_file, image_dir, image_file):
         self.fps, self.nframes, self.interval = video_2_images(video_file, image_dir, image_file)
         img = cv2.imread('frames/000000.jpg')
-        cv2_imshow(img)
+        cv2_imshow(cv2.resize(img , (int(img.shape[0]*0.5), int(img.shape[1]*0.5))))
 
     def apply_mp(self):
         reset_folder('images')
@@ -100,4 +100,3 @@ class MPObject():
         else:
             landmark = self.sequence[frame].pose_landmarks
         print(landmark)
-        

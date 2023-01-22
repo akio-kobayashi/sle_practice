@@ -30,6 +30,8 @@ class MPObject():
         self.fps = 0
         self.interval = 0
 
+        self.sequence=[]
+
         reset_folder('frames')
 
     def read_video(self, video_file, image_dir, image_file):
@@ -44,8 +46,10 @@ class MPObject():
             files.append(name)
         images = {name: cv2.imread(name) for name in files}
 
+        self.sequence=[]
         for name, image in tqdm(images.items()):
             results = self.holistic.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
+            self.sequence.append(results)
 
             annotated_image = image.copy()
             self.mp_drawing.draw_landmarks(
@@ -85,3 +89,15 @@ class MPObject():
         command='ffmpeg -y -r {0} -i images/%6d.jpg -vcodec libx264 -pix_fmt yuv420p -loglevel error {1}'.format(str(fps_r), out_path)
         #command='ffmpeg -y -r -i images/%6d.jpg -vcodec libx264 -pix_fmt yuv420p -loglevel error '
         os.system(command)
+
+    def show_landmark(self, part='LEFT', frame=0):
+        if part == 'LEFT':
+            landmark = self.sequence[frame].left_hand_landmarks
+        elif part == 'RIGHT':
+            landmark = self.sequence[frame].right_hand_landmarks
+        elif part == 'FACE':
+            landmark = self.sequence[frame].face_landmarks
+        else:
+            landmark = self.sequence[frame].pose_landmarks
+        print(landmark)
+        

@@ -39,7 +39,7 @@ class MPObject():
     def apply_mp(self):
         reset_folder('images')
         files = []
-        for name in sorted(glob.glog('./frames/*.jpg')):
+        for name in sorted(glob.glob('./frames/*.jpg')):
             files.append(name)
         images = {name: cv2.imread(name) for name in files}
 

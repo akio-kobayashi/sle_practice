@@ -94,7 +94,7 @@ class MPObject():
         path = 'images/%06d.jpg' % (frame)
         img = cv2.imread(path)
         cv2_imshow(cv2.resize(img , (int(img.shape[1]*0.5), int(img.shape[0]*0.5))))
-        print(len(self.sequence))
+        print(len(self.sequence[frame]))
         if part == 'LEFT':
             landmark = self.sequence[frame].left_hand_landmarks
         elif part == 'RIGHT':

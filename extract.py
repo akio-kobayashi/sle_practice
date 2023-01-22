@@ -5,6 +5,7 @@ import cv2
 import numpy as np
 import glob
 from tqdm import tqdm
+import os
 
 class MPObject():
     def __init__(self):
@@ -77,9 +78,10 @@ class MPObject():
             )
 
             save_name = 'images/'+os.path.basename(name)
-            cv2.imgwrite(save_name, annotated_image)
+            cv2.imwrite(save_name, annotated_image)
 
     def image2video(self, out_path):
         fps_r = self.fps/self.interval
         command='ffmpeg -y -r {0} -i images/%6d.jpg -vcodec libx264 -pix_fmt yuv420p -loglevel error {1}'.format(str(fps_r), out_path)
-        command='ffmpeg -y -r -i images/%6d.jpg -vcodec libx264 -pix_fmt yuv420p -loglevel error '
+        #command='ffmpeg -y -r -i images/%6d.jpg -vcodec libx264 -pix_fmt yuv420p -loglevel error '
+        os.system(comman)

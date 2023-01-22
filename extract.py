@@ -84,4 +84,4 @@ class MPObject():
         fps_r = self.fps/self.interval
         command='ffmpeg -y -r {0} -i images/%6d.jpg -vcodec libx264 -pix_fmt yuv420p -loglevel error {1}'.format(str(fps_r), out_path)
         #command='ffmpeg -y -r -i images/%6d.jpg -vcodec libx264 -pix_fmt yuv420p -loglevel error '
-        os.system(comman)
+        os.system(command)

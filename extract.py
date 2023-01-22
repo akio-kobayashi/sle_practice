@@ -12,7 +12,7 @@ class MPObject():
         self.mp_holistic = mp.solutions.holistic
         self.mp_drawing = mp.solutions.drawing_utils
 
-        self.holistic = mp_holistic.Holistic(static_image_mode=True, min_detection_confidence=0.5)
+        self.holistic = self.mp_holistic.Holistic(static_image_mode=True, min_detection_confidence=0.5)
 
         WHITE_COLOR = (224, 224, 224)
         BLACK_COLOR = (0, 0, 0)

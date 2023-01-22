@@ -65,7 +65,7 @@ class MPObject():
             self.mp_drawing.draw_landmarks(
                 image = annotated_image,
                 landmark_list = results.face_landmarks,
-                connections = self.mp_holistic.FACEMESH_CONNECTIONS,
+                connections = self.mp_holistic.FACEMESH_TESSELATION,
                 landmark_drawing_spec = self.drawing_face_spec,
                 connection_drawing_spec = self.drawing_face_spec
             )

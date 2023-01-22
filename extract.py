@@ -93,7 +93,7 @@ class MPObject():
     def show_landmark(self, part='LEFT', frame=0):
         path = 'images/%06d.jpg' % (frame)
         img = cv2.imread(path)
-        cv2_imshow(img, int(img.shape[1]*0.5), int(img.shape[0]*0.5))
+        cv2_imshow(img, (int(img.shape[1]*0.5), int(img.shape[0]*0.5)))
         print(len(self.results))
         if part == 'LEFT':
             landmark = self.sequence[frame].left_hand_landmarks

@@ -41,7 +41,7 @@ class MPObject():
         files = []
         for name in sorted(glob.glog('./frames/*.jpg')):
             files.append(name)
-        images = [name: cv2.imread(name) for name in files]
+        images = {name: cv2.imread(name) for name in files}
 
         for name, image in tqdm(images.items()):
             results = self.holistic.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))

@@ -31,12 +31,12 @@ class MPObject():
 
         reset_folder('frames')
 
-    def read_video(video_file, image_dir, image_file):
+    def read_video(self, video_file, image_dir, image_file):
         self.fps, self.nframes, self.interval = video_2_images(video_file, image_dir, image_file)
         img = cv2.imread('frames/000000.jpg')
         cv2_imshow(img)
 
-    def apply_mp():
+    def apply_mp(self):
         reset_folder('images')
         files = []
         for name in sorted(glob.glog('./frames/*.jpg')):
@@ -79,7 +79,7 @@ class MPObject():
             save_name = 'images/'+os.path.basename(name)
             cv2.imgwrite(save_name, annotated_image)
 
-    def image2video(out_path):
+    def image2video(self, out_path):
         fps_r = self.fps/self.interval
-        #command="ffmpeg -y -r "+ str(fps_r) " -i images/\%6d.jpg -vcodec libx264 -pix_fmt yuv420p -loglevel error " + out_path
+        command='ffmpeg -y -r {0} -i images/%6d.jpg -vcodec libx264 -pix_fmt yuv420p -loglevel error {1}'.format(str(fps_r), out_path)
         command='ffmpeg -y -r -i images/%6d.jpg -vcodec libx264 -pix_fmt yuv420p -loglevel error '

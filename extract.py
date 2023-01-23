@@ -6,6 +6,7 @@ import numpy as np
 import glob
 from tqdm import tqdm
 import os
+import pandas as pd
 
 class MPObject():
     def __init__(self):
@@ -30,8 +31,8 @@ class MPObject():
         self.fps = 0
         self.interval = 0
 
-        self.sequence=[]
-
+        self.data=[]
+        self.label=[]
         reset_folder('frames')
 
     def read_video(self, video_file, image_dir, image_file):
@@ -46,10 +47,72 @@ class MPObject():
             files.append(name)
         images = {name: cv2.imread(name) for name in files}
 
-        self.sequence=[]
+        self.data=[]
         for name, image in tqdm(images.items()):
             results = self.holistic.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-            self.sequence.append(results)
+            csv=[]
+            self.label=[]
+            if results.face_landmarks:
+                for index, landmark in enumerate(results.face_landmarks.landmark):
+                    self.label.append("face_"+str(index) + "_x")
+                    self.label.append("face_"+str(index) + "_y")
+                    self.label.append("face_"+str(index) + "_z")
+                    csv.append(landmark.x)
+                    csv.append(landmark.y)
+                    csv.append(landmark.z)
+            else:
+                for index in range(468):
+                    self.label.append("face_"+str(index) + "_x")
+                    self.label.append("face_"+str(index) + "_y")
+                    self.label.append("face_"+str(index) + "_z")
+                    for _ in range(3):
+                        csv.append(np.nan)
+            if results.right_hand_landmarks:
+                for index, landmark in enumerate(results.right_hand_landmarks.landmark):
+                    self.label.append("r_hand_"+str(index) + "_x")
+                    self.label.append("r_hand_"+str(index) + "_y")
+                    self.label.append("r_hand_"+str(index) + "_z")
+                    csv.append(landmark.x)
+                    csv.append(landmark.y)
+                    csv.append(landmark.z)
+            else:
+                for index in range(21):
+                    self.label.append("r_hand_"+str(index) + "_x")
+                    self.label.append("r_hand_"+str(index) + "_y")
+                    self.label.append("r_hand_"+str(index) + "_z")
+                    for _ in range(3):
+                        csv.append(np.nan)
+            if results.left_hand_landmarks:
+                for index, landmark in enumerate(results.left_hand_landmarks.landmark):
+                    self.label.append("l_hand_"+str(index) + "_x")
+                    self.label.append("l_hand_"+str(index) + "_y")
+                    self.label.append("l_hand_"+str(index) + "_z")
+                    csv.append(landmark.x)
+                    csv.append(landmark.y)
+                    csv.append(landmark.z)
+            else:
+                for index in range(21):
+                    self.label.append("l_hand_"+str(index) + "_x")
+                    self.label.append("l_hand_"+str(index) + "_y")
+                    self.label.append("l_hand_"+str(index) + "_z")
+                    for _ in range(3):
+                        csv.append(np.nan)
+            if results.pose_landmarks:
+                for index, landmark in enumerate(results.pose_landmarks.landmark):
+                    self.label.append("pose_"+str(index) + "_x")
+                    self.label.append("pose_"+str(index) + "_y")
+                    self.label.append("pose_"+str(index) + "_z")
+                    csv.append(landmark.x)
+                    csv.append(landmark.y)
+                    csv.append(landmark.z)
+            else:
+                for index in range(33):
+                    self.label.append("pose_"+str(index) + "_x")
+                    self.label.append("pose_"+str(index) + "_y")
+                    self.label.append("pose_"+str(index) + "_z")
+                    for _ in range(3):
+                        csv.append(np.nan)
+            self.data.append(csv)
 
             annotated_image = image.copy()
             self.mp_drawing.draw_landmarks(
@@ -90,17 +153,7 @@ class MPObject():
         #command='ffmpeg -y -r -i images/%6d.jpg -vcodec libx264 -pix_fmt yuv420p -loglevel error '
         os.system(command)
 
-    def show_landmark(self, part='LEFT', frame=0):
-        path = 'images/%06d.jpg' % (frame)
-        img = cv2.imread(path)
-        cv2_imshow(cv2.resize(img , (int(img.shape[1]*0.5), int(img.shape[0]*0.5))))
-        print((self.sequence[frame]))
-        if part == 'LEFT':
-            landmark = self.sequence[frame].left_hand_landmarks
-        elif part == 'RIGHT':
-            landmark = self.sequence[frame].right_hand_landmarks
-        elif part == 'FACE':
-            landmark = self.sequence[frame].face_landmarks
-        else:
-            landmark = self.sequence[frame].pose_landmarks
-        print(landmark)
+    def save_data(self, out_path):
+        df = pd.DataFrame(self.data, columns=self.label)
+        df.to_csv(out_path)
+        

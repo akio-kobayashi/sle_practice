@@ -154,6 +154,5 @@ class MPObject():
         os.system(command)
 
     def save_data(self, out_path):
-        df = pd.DataFrame(self.data, columns=self.label)
+        df = pd.DataFrame(self.data[:10], columns=self.label)
         df.to_csv(out_path)
-        

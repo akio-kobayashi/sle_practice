@@ -54,7 +54,7 @@ class MPObject():
         for name, image in tqdm(images.items()):
             img_width = image.shape[1]
             img_height = image.shape[0]
-            background = np.zeros((img_height, img_width), np.uint8)
+            background = np.zeros((img_height, img_width,3), np.uint8)
             
             results = self.holistic.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
             csv=[]
